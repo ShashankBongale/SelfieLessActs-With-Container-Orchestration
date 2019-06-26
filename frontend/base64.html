@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title> Image </title>
+</head>
+<body>
+  <input type = "file" accept="image/*" id = "img">
+  <button type="button" onclick="fun()">Submit</button>
+  <p id ="p"></p>
+  <script>
+  function fun()
+  {
+    var doc = document;
+     var form = doc.getElementById("img");
+     var file = form.files[0];
+      var reader = new FileReader();
+
+  reader.readAsDataURL(file);
+reader.onload = function(e) {
+  var dom1 = document.getElementById("p");
+  dom1.innerHTML = e.target.result;
+  //alert(e.target.result);
+  }
+}
+  </script>
+</body>
+</html>

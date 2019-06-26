@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Delete Category</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link href="https://fonts.googleapis.com/css?family=Oswald|Coiny" rel="stylesheet">
+
+</head>
+<body>
+
+	<div class="topnav" style="height: 135px; ">
+				<span class="login100-form-logo" style="position: absolute; top: 8px; left: 30%">
+					<!-- <i class="zmdi zmdi-landscape"></i> -->
+					<img src="images/icons/humanity.png" alt="logo" style=" width: 90px; height: 90px;">
+				</span>
+				<span class="login100-form-title p-b-30 p-t-40" style="font-size: 50px;position: absolute; top: 7px; left: 38%;font-family:Coiny;"> SelfieLess Acts </span>
+	</div>
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-03.jpg');">
+			<div class="wrap-login100">
+				<div class="login100-form validate-form">
+					<span class="login100-form-logo">
+						<!-- <i class="zmdi zmdi-landscape"></i> -->
+						<img src="images/icons/humanity.png" alt="logo">
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Delete Category
+					</span>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" name="category" placeholder="Category" id="input">
+					</div>
+
+
+
+
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" onclick="delete_cat()">
+							Delete
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	 <script>
+		  function delete_cat()
+			{
+			  var category_name = document.getElementById("input").value;
+			  req = new XMLHttpRequest();
+			  var url = "http://127.0.0.1:5000/api/v1/categories/" +category_name;
+			  //alert(url);
+			  req.open("DELETE", url, true);
+			  req.setRequestHeader("Content-type", "application/json");
+			  req.send(JSON.stringify([]));
+			  req.onload = function ()
+			  {
+			    if (req.status == 200)
+			    {
+			      alert("category deleted");
+			      location.replace("index.html");
+			    }
+			    else if(req.status == 405)
+			    {
+			      alert("category does not exists");
+			      location.replace("index.html");
+			    }
+			    else
+			    {
+				alert("Error In Sending Try Again");
+				location.replace("delete.html");
+			    }
+			  }
+			}
+ 	 </script>
+
+</body>
+</html>

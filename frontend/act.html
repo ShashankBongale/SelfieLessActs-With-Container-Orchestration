@@ -1,0 +1,243 @@
+<!--
+<!doctype html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Nova+Flat|Righteous" rel="stylesheet">
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Act</title>
+  <link href="https://fonts.googleapis.com/css?family=Dosis:400,700" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body onload = "fun()">
+  <h1 id ="head" style="font-size:25px;"></h1>
+  <div id ="root" style="font-family:Righteous"></div>
+  <script>
+  function fun()
+  {
+    var cur_url = document.URL;
+    var arr = cur_url.split("?");
+    var cat = arr[1];
+    const anc = document.getElementById("anc");
+    anc.setAttribute("href","upvote.html?"+arr[1]);
+    const head = document.getElementById("head");
+    head.textContent = cat;
+    req = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/api/v1/categories/" +cat+"/acts";
+    req.open("GET", url, true);
+    req.setRequestHeader("Content-type", "application/json");
+    req.send(JSON.stringify({}));
+    req.onload = function ()
+    {
+      if (req.status == 200)
+      {
+        var data = JSON.parse(this.response);
+        const app = document.getElementById("root");
+        const logo = document.createElement("img");
+        logo.src = "logo.png";
+        const container = document.createElement("div");
+        container.setAttribute("class","container");
+        //app.appendChild(logo);
+        app.appendChild(container);
+        var i;
+        //alert("Hi");
+        //alert(data[0]["actId"]);
+        for (i = 0;i <data.length;i++ )
+        {
+          //alert(data[i]["actId"]);
+          const card = document.createElement("div");
+          card.setAttribute("class","card");
+          const h1 = document.createElement('h1');
+          h1.textContent = "Act Id :"+data[i]["actId"];
+          h1.setAttribute("class","helper");
+          const h2 = document.createElement("h1");
+          h2.textContent = "Caption :"+data[i]["caption"];
+          container.appendChild(card);
+          const h3 = document.createElement("h1");
+          h3.textContent = "Upvotes :"+data[i]["upvotes"];
+          //const h5 = document.createElement("button");
+          //h5.textContent = "Upvote";
+          container.appendChild(card);
+          var src_path ="data:image/jpeg;base64," + data[i]["imgB64"];
+          //alert(src_path);
+          //"data:image/jpeg;base64,"
+          const h4 = document.createElement("h1");
+          h4.textContent = "Timestamp :"+data[i]["timestamp"];
+          const image = document.createElement("img");
+          image.setAttribute("src",src_path);
+          card.appendChild(h1);
+          card.appendChild(h2);
+          //card.appendChild(h5);
+          card.appendChild(h4);
+          card.appendChild(image);
+          card.appendChild(h3);
+        }
+        //alert(data[0]["actId"]);
+      }
+      else if(req.status == 413){
+        alert("Number acts is more than 500");
+        location.replace("index.html");
+      }
+      else if(req.status == 204)
+      {
+        alert("No Acts in this category to display");
+        //location.replace("index.html");
+      }
+      else {
+        alert("Error");
+        location.replace("index.html");
+      }
+    }
+  }
+  function upvote()
+  {
+    var dom = document.getElementByClassName("")
+  }
+  </script>
+  <div class = "row">
+  <div class ="col-lg-4">
+  <a href = "upload_act.html"><button type="button" class = "btn btn-success" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Upload Act</span></button></a>
+  </div>
+  <div class = "col-lg-4">
+  <a href = "remove_act.html"><button type="button" class = "btn btn-danger" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Remove Act</span></button></a>
+  </div>
+  <div class = "col-lg-4">
+    <a id = "anc"><button type="button" class = "btn btn-primary" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Upvote Act</span></button></a>
+
+  </div>
+  </div>
+</body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New User</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link href="https://fonts.googleapis.com/css?family=Oswald|Coiny" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nova+Flat|Righteous" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+  html {
+          background: url('images/bg-05.png') no-repeat center center fixed;
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+      }
+  		</style>
+
+</head>
+<body onload="fun()">
+
+	<div class="topnav" style="height: 135px; ">
+				<span class="login100-form-logo" style="position: absolute; top: 8px; left: 30%">
+					<!-- <i class="zmdi zmdi-landscape"></i> -->
+					<img src="images/icons/humanity.png" alt="logo" style=" width: 90px; height: 90px;">
+				</span>
+				<span class="login100-form-title p-b-30 p-t-40" style="font-size: 50px;position: absolute; top: 7px; left: 38%;font-family:Coiny;"> SelfieLess Acts </span>
+	</div>
+  <div style="position: absolute; top: 145px; left: 70px ;opacity: 1;">
+		<a href = "upload_act.html"><button type="button" class = "wrap-login10001" style="padding:-10%;font-size:10px;"><span class="login100-form-title p-b-34 p-t-27" style="font-family:Oswald;">Upload</span></button></a>
+	</div>
+
+	<div style="position: absolute; top: 145px; left: 510px">
+		<a href = "remove_act.html"><button type="button" class = "wrap-login10001"><span class="login100-form-title p-b-34 p-t-27" style="font-family:Oswald;">Remove Act</span></button></a>
+	</div>
+
+	<div style="position: absolute; top: 145px; left: 980px">
+		<a id ="anc"><button type="button" class = "wrap-login10001"><span class="login100-form-title p-b-34 p-t-27" style="font-family:Oswald;">Upvote</span></button></a>
+	</div>
+
+	<h1 id ="head" style="font-size:25px;margin-top:10%;opacity:0.7;"></h1>
+	<div id ="root" style="font-family:Righteous;opacity:0.7;"></div>
+	<script>
+  function fun()
+  {
+    var cur_url = document.URL;
+    var arr = cur_url.split("?");
+    var cat = arr[1];
+    const anc = document.getElementById("anc");
+    anc.setAttribute("href","upvote.html?"+arr[1]);
+    const head = document.getElementById("head");
+    head.textContent = cat;
+    req = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/api/v1/categories/" +cat+"/acts";
+    req.open("GET", url, true);
+    req.setRequestHeader("Content-type", "application/json");
+    req.send(JSON.stringify({}));
+    req.onload = function ()
+    {
+      if (req.status == 200)
+      {
+        var data = JSON.parse(this.response);
+        const app = document.getElementById("root");
+        const logo = document.createElement("img");
+        logo.src = "logo.png";
+        const container = document.createElement("div");
+        container.setAttribute("class","container");
+        //app.appendChild(logo);
+        app.appendChild(container);
+        var i;
+        //alert("Hi");
+        //alert(data[0]["actId"]);
+        for (i = 0;i <data.length;i++ )
+        {
+          //alert(data[i]["actId"]);
+          const card = document.createElement("div");
+          card.setAttribute("class","card");
+          const h1 = document.createElement('h1');
+          h1.textContent = "Act Id :"+data[i]["actId"];
+          h1.setAttribute("class","helper");
+          const h2 = document.createElement("h1");
+          h2.textContent = "Caption :"+data[i]["caption"];
+          container.appendChild(card);
+          const h3 = document.createElement("h1");
+          h3.textContent = "Upvotes :"+data[i]["upvotes"];
+          //const h5 = document.createElement("button");
+          //h5.textContent = "Upvote";
+          container.appendChild(card);
+          var src_path ="data:image/jpeg;base64," + data[i]["imgB64"];
+          //alert(src_path);
+          //"data:image/jpeg;base64,"
+          const h4 = document.createElement("h1");
+          h4.textContent = "Timestamp :"+data[i]["timestamp"];
+          const image = document.createElement("img");
+          image.setAttribute("src",src_path);
+          card.appendChild(h1);
+          card.appendChild(h2);
+          //card.appendChild(h5);
+          card.appendChild(h4);
+          card.appendChild(image);
+          card.appendChild(h3);
+        }
+        //alert(data[0]["actId"]);
+      }
+      else if(req.status == 413){
+        alert("Number acts is more than 500");
+        location.replace("index.html");
+      }
+      else if(req.status == 204)
+      {
+        alert("No Acts in this category to display");
+        //location.replace("index.html");
+      }
+      else {
+        alert("Error");
+        location.replace("index.html");
+      }
+    }
+  }
+  function upvote()
+  {
+    var dom = document.getElementByClassName("")
+  }
+  </script>
+</body>
+</html>

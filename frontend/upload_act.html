@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Upload Act</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link href="https://fonts.googleapis.com/css?family=Oswald|Coiny" rel="stylesheet">
+
+</head>
+<body>
+
+	<div class="topnav" style="height: 135px; ">
+				<span class="login100-form-logo" style="position: absolute; top: 8px; left: 30%">
+					<!-- <i class="zmdi zmdi-landscape"></i> -->
+					<img src="images/icons/humanity.png" alt="logo" style=" width: 90px; height: 90px;">
+				</span>
+				<span class="login100-form-title p-b-30 p-t-40" style="font-size: 50px;position: absolute; top: 7px; left: 38%;font-family:Coiny;"> SelfieLess Acts </span>
+	</div>
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-03.jpg');">
+			<div class="wrap-login100">
+				<div class="login100-form validate-form">
+					<span class="login100-form-logo">
+						<!-- <i class="zmdi zmdi-landscape"></i> -->
+						<img src="images/icons/humanity.png" alt="logo">
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Upload Act
+					</span>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" placeholder="Act ID" id = "actid">
+
+
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" placeholder="Username" id = "name">
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" placeholder="DD-MM-YYYY:SS-MM-HH" id = "time">
+					</div>
+
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" placeholder="Caption" id = "caption">
+					</div>
+
+
+					<div class="wrap-input100 validate-input">
+						<!-- <input class="input100" type="text" placeholder="Base 64 image" id = "image"> -->
+						<input class="input100" type="file" placeholder="Upload image" accept="image/*" id = "image" onchange="encodeImageFileAsURL(this)">
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" placeholder="Category" id = "cat">
+					</div>
+
+
+
+
+
+
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" onclick="fun()">
+							Upload
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+<p id ="p"></p>
+
+<script>
+	var imgb64;
+	function encodeImageFileAsURL(element) {
+  var file = element.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function() {
+    var t = reader.result;
+		imgb64 = t.split(/,(.+)/)[1];
+  }
+  reader.readAsDataURL(file);
+}
+  function fun()
+  {
+		//alert(imgb64);
+    var id = document.getElementById("actid").value;
+    var name = document.getElementById("name").value;
+    var time = document.getElementById("time").value;
+    var caption = document.getElementById("caption").value;
+		var image = document.getElementById("image");
+    var cat = document.getElementById("cat").value;
+    var d = {};
+    d["actId"] = Number(id);
+    d["timestamp"] = time;
+    d["caption"] = caption;
+		d["imgB64"] = imgb64;
+		//console.log(imgb64);
+    d["username"] = name;
+    d["categoryName"] = cat;
+    req = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/api/v1/acts";
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-type", "application/json");
+    var data = JSON.stringify(d);
+    req.send(data);
+    req.onload = function ()
+    {
+      if (req.status == 201)
+      {
+        alert("Act Added");
+        location.replace("index.html");
+      }
+      else if(req.status == 405)
+      {
+        alert("Error with place values");
+        location.replace("upload_act.html");
+      }
+      else
+      {
+          alert("Base64 Error!");
+          //location.replace("upload_act.html");
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
