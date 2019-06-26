@@ -1,0 +1,7 @@
+{
+	"first_container_ip": "8100",
+	"scaling_check_interval": "75",
+	"scaling_container_bracket": "30",
+	"fault_tolerance_check_interval": "2"
+}
+
