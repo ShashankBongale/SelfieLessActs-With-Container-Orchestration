@@ -30,7 +30,8 @@ def add_user():
                 if(i not in hex_characters):
                     connection.close()
                     abort(400)
-            command = "INSERT INTO users values " + "(" + request.json["username"] + ',' + "abc" + ")"
+            name = request.json["username"]
+            command = "INSERT INTO users values "+"('" + name + "','" + password + "')"
             connection.execute(command)
             connection.commit()
             connection.close()
