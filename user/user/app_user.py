@@ -50,6 +50,7 @@ def rem_user(username):
     connection = sqlite3.connect('user.db')
     res = list(connection.execute("SELECT user_name,password FROM users"))
     users_list = [i[0] for i in res]
+    print(users_list,file=sys.stderr)
     if(username in users_list):
         command = "DELETE from users where user_name = " + "'"+ username + "'"
         connection.execute(command)
