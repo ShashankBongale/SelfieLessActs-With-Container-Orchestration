@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, abort
 import re
 import pickle
+import sqlite3
 
 app = Flask(__name__)
 app_count = 0
@@ -18,52 +19,58 @@ def after_request(response):
 def add_user():
     global app_count
     app_count = app_count + 1
-    usernames = [user['username'] for user in user_list]	#List of existing usernames in the database
+    connection = sqlite3.connect('user.db')
+    res = list(connection.execute("SELECT user_name,password FROM users"))
+    usernames = [i[0] for i in res]
     if(request.json["username"] not in usernames):
         hex_characters = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9']
         password = request.json["password"]
         if(len(password) == 40):
             for i in password:
                 if(i not in hex_characters):
+                    connection.close()
                     abort(400)
-            user = dict()
-            user["username"] = request.json["username"]
-            user["password"] = request.json["password"]
-            user_list.append(user)
+            command = "INSERT INTO users values " + "(" + request.json["username"] + ',' + request.json["password"] + ")"
+            connection.execute(command)
+            connection.commit()
+            connection.close()
             return jsonify({}),201
         else:
+            connection.close()
             abort(400)
     else:
+        connection.close()
         abort(405)
-
 # 2_final [Remove users]
 @app.route('/api/v1/users/<string:username>',methods = ['DELETE'])
 def rem_user(username):
     global app_count
     app_count = app_count + 1
-    #print(username)
-    users = []
-    for i in user_list:
-        users.append(i["username"])
-    if(username in users):
-        index = users.index(username)
-        del(user_list[index])
+    connection = sqlite3.connect('user.db')
+    res = list(connection.execute("SELECT user_name,password FROM users"))
+    users_list = [i[0] for i in res]
+    if(username in users_list):
+        command = "DELETE from users where user_name = " + username
+        connection.execute(command)
+        connection.commit()
+        connection.close()
         return jsonify({}),200
     else:
+        connection.close()
         abort(405)
-
 # 3 list all users
 @app.route('/api/v1/users', methods = ['GET'])
 def list_users():
     global app_count
     app_count = app_count + 1
-    if(len(user_list) > 0):
-        usernames = [user['username'] for user in user_list]
+    connection = sqlite3.connect('user.db')
+    res = list(connection.execute("SELECT user_name,password FROM users"))
+    connection.close()
+    if(len(res) > 0):
+        usernames = [i[0] for i in res]
         return jsonify(usernames),200
     else:
         return jsonify({}),204
-
-
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
     if func is None:
@@ -90,4 +97,3 @@ def del_count():
 if __name__ == '__main__':
     user_list = pickle.load(open("user_list.p", "rb"))
     app.run("0.0.0.0",port=80)
-
