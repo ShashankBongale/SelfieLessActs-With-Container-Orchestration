@@ -51,7 +51,7 @@ def rem_user(username):
     res = list(connection.execute("SELECT user_name,password FROM users"))
     users_list = [i[0] for i in res]
     if(username in users_list):
-        command = "DELETE from users where user_name = " + username
+        command = "DELETE from users where user_name = \'" + username + "'"
         connection.execute(command)
         connection.commit()
         connection.close()
